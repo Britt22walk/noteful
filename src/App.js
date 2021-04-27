@@ -1,9 +1,10 @@
 import "./App.css";
 
 import React, { Component } from "react";
-import { Route } from "react-router-dom";
+import { Route, Switch, Link } from "react-router-dom";
 import FolderSidebar from "./components/FoldeSiderbar/FolderSidebar";
 import NoteList from "./components/NoteList/NoteList";
+import Header from "./components/Header/Header";
 import STORE from "./STORE";
 
 class App extends Component {
@@ -11,19 +12,34 @@ class App extends Component {
     super(props);
 
     this.state = {
-      notes: STORE.notes,
-      folders: STORE.folders,
+      notes: [],
+      folders: [],
     };
   }
 
+  handleFolderClick = (selectedFolder) => {
+    console.log("the id of the folder clicked is " + selectedFolder);
+    const notes = STORE.notes.filter(
+      (note) => note.folderId === selectedFolder
+    );
+
+    this.setState({ notes: notes });
+  };
+
+  handleNoteClick = () => {
+    console.log("Note clicked!");
+  };
+
   render() {
-    console.log(this.state.folders);
     return (
       <main className="App">
         <header>
-          <h1>Noteful</h1>
+          <Header />
         </header>
-        <FolderSidebar folders={this.state.folders} />
+        <FolderSidebar
+          folders={STORE.folders}
+          handleFolderClick={this.handleFolderClick}
+        />
         <NoteList notes={this.state.notes} />
       </main>
     );

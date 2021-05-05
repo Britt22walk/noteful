@@ -24,12 +24,17 @@ class App extends Component {
       (note) => note.folderId === selectedFolder
     );
 
-    this.setState({ notes: notes });
+    this.setState({ notes });
   };
 
-  handleNoteClick = () => {
-    console.log("Note clicked!");
-  };
+  displayContentClick = (selectedNote) => {
+      console.log('content will be displaye for', selectedNote);
+      const notes = this.state.notes.filter((note) => note.id === selectedNote 
+      );
+      this.setState ({ notes })
+      
+    
+  }
 
   render() {
     return (
@@ -42,17 +47,19 @@ class App extends Component {
           folders={STORE.folders}
           handleFolderClick={this.handleFolderClick}
         />
-
+        <switch>
+        <Route exact path="/" render={() => <NoteList notes={STORE.notes} displayContentClick={this.displayContentClick}/>} />
         <Route
           path="/folder/:folderId"
-          render={() => <NoteList notes={this.state.notes} />}
+          render={() => <NoteList notes={this.state.notes} displayContentClick={this.displayContentClick}/>}
         />
         <Route
           path="/note/:noteId"
-          render={() => <div><NoteList notes={this.state.notes}/> <NoteContent note={this.state.notes} /></div>}
+          render={() => <div><NoteList notes={this.state.notes} displayContentClick={this.displayContentClick}/>  </div>}
         />
 
-        <Route exact path="/" render={() => <NoteList notes={STORE.notes} />} />
+        
+      </switch>
       </main>
     );
   }

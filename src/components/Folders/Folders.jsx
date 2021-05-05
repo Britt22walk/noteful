@@ -8,9 +8,6 @@ export default function Folders(props) {
     <ul className="folders">
       <li>
       <Link to={`/folder/${props.id}`} onClick={(e) => props.handleFolderClick(props.id)}> {props.name} </Link>
-      
-        
-  
       </li>
     </ul>
   );

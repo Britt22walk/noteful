@@ -1,13 +1,16 @@
-import React, { Component } from "react";
+import React from "react";
+
+import { NavLink, Link } from 'react-router-dom';
 
 export default function Folders(props) {
+  console.log(props)
   return (
     <ul className="folders">
       <li>
-        {props.name}
-        <button onClick={(e) => props.handleFolderClick(props.id)}>
-          Select
-        </button>
+      <Link to={`/folder/${props.id}`} onClick={(e) => props.handleFolderClick(props.id)}> {props.name} </Link>
+      
+        
+  
       </li>
     </ul>
   );

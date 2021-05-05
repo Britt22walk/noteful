@@ -6,6 +6,7 @@ import FolderSidebar from "./components/FoldeSiderbar/FolderSidebar";
 import NoteList from "./components/NoteList/NoteList";
 import Header from "./components/Header/Header";
 import STORE from "./STORE";
+import NoteContent from './components/NoteContent/NoteContent';
 
 class App extends Component {
   constructor(props) {
@@ -36,11 +37,22 @@ class App extends Component {
         <header>
           <Header />
         </header>
+
         <FolderSidebar
           folders={STORE.folders}
           handleFolderClick={this.handleFolderClick}
         />
-        <NoteList notes={this.state.notes} />
+
+        <Route
+          path="/folder/:folderId"
+          render={() => <NoteList notes={this.state.notes} />}
+        />
+        <Route
+          path="/note/:noteId"
+          render={() => <div><NoteList notes={this.state.notes}/> <NoteContent note={this.state.notes} /></div>}
+        />
+
+        <Route exact path="/" render={() => <NoteList notes={STORE.notes} />} />
       </main>
     );
   }

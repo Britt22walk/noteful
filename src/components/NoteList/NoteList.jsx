@@ -5,7 +5,7 @@ import "./NoteList.css";
 import NoteContent from "../NoteContent/NoteContent";
 
 export default function NoteList(props) {
-  const { notes, folderId, noteId, displayContentClick } = props;
+  const { notes, folderId, noteId, displayContentClick, content } = props;
   let filterNotes = notes;
   if (folderId){ filterNotes = filterNotes.filter(n => n.folderId === folderId)}
   if (noteId) { filterNotes = filterNotes.filter(n => n.noteId === noteId )}

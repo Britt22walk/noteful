@@ -5,7 +5,7 @@ import "./NoteContent.css"
 export default function NoteContent(props) {
 const { notes } = props 
   
-  console.log( notes[0].content );
+  console.log(notes[0].name)
   
   return (
     <div className="note-content">

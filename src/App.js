@@ -1,7 +1,7 @@
 import "./App.css";
 
 import React, { Component } from "react";
-import { Route, Switch, Link } from "react-router-dom";
+import { Route } from "react-router-dom";
 import FolderSidebar from "./components/FoldeSiderbar/FolderSidebar";
 import NoteList from "./components/NoteList/NoteList";
 import Header from "./components/Header/Header";
@@ -9,7 +9,6 @@ import STORE from "./STORE";
 import NoteContent from "./components/NoteContent/NoteContent";
 import BackButton from "./components/BackButton/BackButton";
 import AppContext from "./components/AppContext";
-import Folders from './components/Folders/Folders';
 
 class App extends Component {
   constructor(props) {
@@ -18,12 +17,41 @@ class App extends Component {
     this.state = {
       notes: [],
       folders: [],
-      
     };
   }
+  componentDidMount() {
+    Promise.all([
+    fetch("http://localhost:9090/folders"),
+    fetch("http://localhost:9090/notes")
+    ])
+      .then(([foldersRes, notesRes]) => {
+        if (!foldersRes.ok) 
+          throw new Error("Something went wrong with notes!");
+        if (!notesRes.ok) 
+          throw new Error ("Something went wrong with folders!")
+        
+        return Promise.all([foldersRes.json(), notesRes.json()])
+        })
+      .then(([folders, notes]) => {
+        console.log("notes loading.." + notes, "folders loading..." + folders)
+        this.setState({folders, notes})
+      })
+  }
+
+addFolder(){
+
+}
+
+addNote (){
+
+}
+
+deleteNote(){
+
+}
+
 
   handleFolderClick = (selectedFolder) => {
-    console.log("the id of the folder clicked is " + selectedFolder);
     const folders = STORE.folders.filter(
       (folder) => folder.id === selectedFolder
     );
@@ -35,35 +63,37 @@ class App extends Component {
   };
 
   handleNoteClick = (selectedNote) => {
-    console.log("content will be displaye for", selectedNote);
     const notes = this.state.notes.filter((note) => note.id === selectedNote);
-    this.setState({ notes: notes, addButtonActive: false });
+    this.setState({ notes });
   };
 
   render() {
-    const contextValue = {
-      allFolders: this.Folders,
-      activeFolder: this.state.folders,
-
+    const value = {
+      notes: this.state.notes,
+      folders: this.state.folders,
+      deleteNote: this.deleteNote,
+      addNote: this.addNote,
+      addFolder: this.addFolder
     }
+    
     return (
       <main className="App">
         <header>
           <Header />
         </header>
-        <AppContext.Provider value={contextValue}>
+      <AppContext.Provider value={value}>
           <Route
             exact
             path="/"
-            render={() => (
+            component={() => (
               <div>
                 <FolderSidebar
-                  folders={STORE.folders}
+   
                   handleFolderClick={this.handleFolderClick}
-                  bac
+                  
                 />
                 <NoteList
-                  notes={STORE.notes}
+                  
                   handleNoteClick={this.handleNoteClick}
                 />
               </div>
@@ -75,11 +105,11 @@ class App extends Component {
             render={() => (
               <div>
                 <FolderSidebar
-                  folders={STORE.folders}
+                  
                   handleFolderClick={this.handleFolderClick}
                 />
                 <NoteList
-                  notes={this.state.notes}
+                
                   handleNoteClick={this.handleNoteClick}
                 />
               </div>
@@ -90,11 +120,11 @@ class App extends Component {
             render={() => (
               <div>
                 <FolderSidebar
-                  folders={this.state.folders}
+                  
                   handleFolderClick={this.handleFolderClick}
                 />
                 <BackButton />
-                <NoteContent notes={this.state.notes} />
+                <NoteContent  />
               </div>
             )}
           />

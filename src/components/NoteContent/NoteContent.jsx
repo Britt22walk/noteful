@@ -1,20 +1,26 @@
 import React from "react";
+import AppContext from '../AppContext'
 import "./NoteContent.css"
 
 
-export default function NoteContent(props) {
-const { notes } = props 
+export default function NoteContent() {
+ 
   
-  console.log(notes[0].name)
+ 
   
   return (
-    <div className="note-content">
-      <h2>{notes[0].name}</h2>
-      <p>{notes[0].modified}</p>
-      
-     <p>{notes[0].content}</p>
-      <button className="delete_btn">Delete Note</button>
-      
-    </div>
+    <AppContext.Consumer>
+      {(value) => { 
+        console.log(value.notes)
+        return (
+      <div className="note-content">
+        <h2>{value.notes.name}</h2>
+        <p>notes.modified</p>
+        
+      <p>notes.content</p>
+        <button className="delete_btn">Delete Note</button>
+        
+      </div>)}}
+    </AppContext.Consumer>
   );
 }

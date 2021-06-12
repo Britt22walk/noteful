@@ -8,11 +8,11 @@ class FolderSidebar extends Component {
   
   
   render() { 
+
+    const { folders, handleFolderClick } = this.context;
     
-    const { folders=[] } = this.context;
-    console.log(folders)
     const foldersList = folders.map((folder, idx) => (
-      <Folders {...folder} key={idx}  />
+      <Folders {...folder} key={idx} handleFolderClick={handleFolderClick} />
     ));
     return (
       <div className="folder_sidebar">

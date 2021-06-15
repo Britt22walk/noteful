@@ -1,5 +1,4 @@
-import React, {Component } from "react";
-import AppContext from "../AppContext";
+import React from "react";
 import Folders from "../Folders/Folders";
 import "./FolderSidebar.css";
 

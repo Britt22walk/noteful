@@ -2,20 +2,13 @@ import "./App.css";
 
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
-<<<<<<< HEAD
 import FolderSidebar from "./components/FolderSiderbar/FolderSidebar";
-=======
-import FolderSidebar from "./components/FoldeSiderbar/FolderSidebar";
->>>>>>> b5642da099e2ff127d4e5b1ae2d713dabb8738ca
 import NoteList from "./components/NoteList/NoteList";
 import Header from "./components/Header/Header";
+import STORE from "./STORE";
 import NoteContent from "./components/NoteContent/NoteContent";
 import AppContext from "./components/AppContext";
-<<<<<<< HEAD
-import FilteredFolderSidebar from './components/FilteredFolderSidebar/FilteredFolderSidebar';
-
-=======
->>>>>>> b5642da099e2ff127d4e5b1ae2d713dabb8738ca
+import FilteredFolderSidebar from "./components/FilteredFolderSidebar/FilteredFolderSidebar";
 
 class App extends Component {
   constructor(props) {
@@ -24,13 +17,10 @@ class App extends Component {
     this.state = {
       notes: [],
       folders: [],
-<<<<<<< HEAD
-      filteredFolder: []
-      
-=======
->>>>>>> b5642da099e2ff127d4e5b1ae2d713dabb8738ca
+      filteredFolder: [],
     };
   }
+
   componentDidMount() {
     Promise.all([
       fetch("http://localhost:9090/folders"),
@@ -48,50 +38,34 @@ class App extends Component {
       });
   }
 
-  addFolder() {}
-
-  addNote() {}
-
-  deleteNote() {}
-
   handleFolderClick = (selectedFolder) => {
-    /* const folders = this.state.folders.filter(
+    console.log("the id of the folder clicked is " + selectedFolder);
+    const folders = STORE.folders.filter(
       (folder) => folder.id === selectedFolder
-    );*/
-    const notes = this.state.notes.filter(
+    );
+    const notes = STORE.notes.filter(
       (note) => note.folderId === selectedFolder
     );
 
-    this.setState({ notes });
+    this.setState({ notes, folders });
   };
 
   handleNoteClick = (selectedNote) => {
+    console.log("content will be displaye for", selectedNote);
     const notes = this.state.notes.filter((note) => note.id === selectedNote);
-<<<<<<< HEAD
     this.setState({ notes: notes });
-=======
-    this.setState({ notes });
->>>>>>> b5642da099e2ff127d4e5b1ae2d713dabb8738ca
   };
 
   render() {
-    const value = {
-      notes: this.state.notes,
-      folders: this.state.folders,
-      deleteNote: this.deleteNote,
-      addNote: this.addNote,
-      addFolder: this.addFolder,
-      handleFolderClick: this.handleFolderClick,
-      handleNoteClick: this.handleNoteClick
+    const contextValue = {
+      allFolders: this.Folders,
+      activeFolder: this.state.folders,
     };
-
     return (
       <main className="App">
         <header>
           <Header />
-         
         </header>
-<<<<<<< HEAD
         <AppContext.Provider value={contextValue}>
           <Route
             exact
@@ -130,29 +104,11 @@ class App extends Component {
             path="/note/:noteId"
             render={() => (
               <div>
-                <FilteredFolderSidebar
-                  folders={this.state.folders}
-                />
+                <FilteredFolderSidebar folders={this.state.folders} />
                 <NoteContent notes={this.state.notes} />
               </div>
             )}
           />
-=======
-        <AppContext.Provider value={value}>
-          <Route exact path="/">
-            <FolderSidebar />
-            
-            <NoteList />
-          </Route>
-          <Route path="/folder/:folderId">
-          <FolderSidebar />
-            <NoteList />
-          </Route>
-          <Route path="/note/:noteId">
-            <FolderSidebar />
-            <NoteContent />
-          </Route>
->>>>>>> b5642da099e2ff127d4e5b1ae2d713dabb8738ca
         </AppContext.Provider>
       </main>
     );

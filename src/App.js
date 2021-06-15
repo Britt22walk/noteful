@@ -1,15 +1,15 @@
 import "./App.css";
 
 import React, { Component } from "react";
-import { Route, Switch, Link } from "react-router-dom";
-import FolderSidebar from "./components/FoldeSiderbar/FolderSidebar";
+import { Route } from "react-router-dom";
+import FolderSidebar from "./components/FolderSiderbar/FolderSidebar";
 import NoteList from "./components/NoteList/NoteList";
 import Header from "./components/Header/Header";
 import STORE from "./STORE";
 import NoteContent from "./components/NoteContent/NoteContent";
-import BackButton from "./components/BackButton/BackButton";
 import AppContext from "./components/AppContext";
-import Folders from './components/Folders/Folders';
+import FilteredFolderSidebar from './components/FilteredFolderSidebar/FilteredFolderSidebar';
+
 
 class App extends Component {
   constructor(props) {
@@ -18,6 +18,7 @@ class App extends Component {
     this.state = {
       notes: [],
       folders: [],
+      filteredFolder: []
       
     };
   }
@@ -37,7 +38,7 @@ class App extends Component {
   handleNoteClick = (selectedNote) => {
     console.log("content will be displaye for", selectedNote);
     const notes = this.state.notes.filter((note) => note.id === selectedNote);
-    this.setState({ notes: notes, addButtonActive: false });
+    this.setState({ notes: notes });
   };
 
   render() {
@@ -89,11 +90,9 @@ class App extends Component {
             path="/note/:noteId"
             render={() => (
               <div>
-                <FolderSidebar
+                <FilteredFolderSidebar
                   folders={this.state.folders}
-                  handleFolderClick={this.handleFolderClick}
                 />
-                <BackButton />
                 <NoteContent notes={this.state.notes} />
               </div>
             )}

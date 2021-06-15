@@ -1,7 +1,7 @@
 import "./App.css";
 
 import React, { Component } from "react";
-import { Route } from "react-router-dom";
+import { Route, useLocation, useHistory } from "react-router-dom";
 import FolderSidebar from "./components/FolderSiderbar/FolderSidebar";
 import NoteList from "./components/NoteList/NoteList";
 import Header from "./components/Header/Header";
@@ -23,16 +23,39 @@ class App extends Component {
     };
   }
 
+  componentDidMount() {
+    Promise.all([
+      fetch(`http://localhost:9090/notes`),
+      fetch(`http://localhost:9090/folders`)
+  ])
+      .then(([notesRes, foldersRes]) => {
+          if (!notesRes.ok)
+              return notesRes.json().then(e => Promise.reject(e));
+          if (!foldersRes.ok)
+              return foldersRes.json().then(e => Promise.reject(e));
+
+          return Promise.all([notesRes.json(), foldersRes.json()]);
+      })
+      .then(([notes, folders]) => {
+        this.setState({
+          notes, folders
+        })
+      })
+      .catch(error => {
+          this.setError(error);
+      });
+  }
+
   handleFolderClick = (selectedFolder) => {
     console.log("the id of the folder clicked is " + selectedFolder);
-    const folders = STORE.folders.filter(
+    const filteredFolder = STORE.folders.filter(
       (folder) => folder.id === selectedFolder
     );
     const notes = STORE.notes.filter(
       (note) => note.folderId === selectedFolder
     );
 
-    this.setState({ notes, folders });
+    this.setState({ notes, filteredFolder });
   };
 
   handleNoteClick = (selectedNote) => {
@@ -59,12 +82,12 @@ class App extends Component {
             render={() => (
               <div>
                 <FolderSidebar
-                  folders={STORE.folders}
+                  folders={this.state.folders}
                   handleFolderClick={this.handleFolderClick}
                   bac
                 />
                 <NoteList
-                  notes={STORE.notes}
+                  notes={this.state.notes}
                   handleNoteClick={this.handleNoteClick}
                 />
               </div>
@@ -76,7 +99,7 @@ class App extends Component {
             render={() => (
               <div>
                 <FolderSidebar
-                  folders={STORE.folders}
+                  folders={this.state.folders}
                   handleFolderClick={this.handleFolderClick}
                 />
                 <NoteList
@@ -88,14 +111,17 @@ class App extends Component {
           />
           <Route
             path="/note/:noteId"
-            render={() => (
+            render={({ history }) => {
+              console.log(history)
+              return(
               <div>
                 <FilteredFolderSidebar
-                  folders={this.state.folders}
+                  folders={this.state.filteredFolder}
                 />
                 <NoteContent notes={this.state.notes} />
-              </div>
-            )}
+              </div>)
+            }}
+            
           />
         </AppContext.Provider>
       </main>

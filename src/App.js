@@ -88,8 +88,8 @@ class App extends Component {
           render={(routeProps) => {
             const { noteId } = routeProps.match.params;
             const note = findNote(notes, noteId) || {};
-            const folders = findFolder(this.state.folders, note.folderId);
-            return <FilteredFolderSidebar {...routeProps} folders={folders} />;
+            const foldersFiltered = findFolder(this.state.folders, note.folderId);
+            return <FilteredFolderSidebar {...routeProps} folders={foldersFiltered} />;
           }}
         />
       </div>

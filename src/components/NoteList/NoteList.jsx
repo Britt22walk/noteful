@@ -5,13 +5,9 @@ import "./NoteList.css";
 
 
 export default function NoteList(props) {
-  const { notes, folderId, noteId, handleNoteClick } = props;
-  let filterNotes = notes;
-  if (folderId){ filterNotes = filterNotes.filter(n => n.folderId === folderId)}
-  if (noteId) { filterNotes = filterNotes.filter(n => n.noteId === noteId )}
   
-  const notesList = filterNotes.map((note, idx) => <Notes {...note} key={idx} handleNoteClick={handleNoteClick} />);
-
+  const notesList = props.notes.map((note, idx) => <Notes {...note} key={idx} handleNoteClick={props.handleNoteClick} />);
+console.log(props)
 
   return (
     <div className="note_list">

@@ -4,10 +4,10 @@ import "./FolderSidebar.css";
 
 function FolderSidebar(props) {
   const { folders, handleFolderClick } = props;
-  const foldersList = folders.map((folder, idx) => (
+  let foldersList = folders.map((folder, idx) => (
     <Folders {...folder} key={idx} handleFolderClick={handleFolderClick} />
   ));
-  console.log(folders);
+  console.log(props);
   return (
     <div className="folder_sidebar">
       {foldersList}

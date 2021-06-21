@@ -1,18 +1,19 @@
-import React, {Component } from "react";
+import React, {Link} from "react";
 import AppContext from "../AppContext";
 import Folders from "../Folders/Folders";
 import BackButton from '../BackButton/BackButton';
 
 
 const FilteredFolderSiderbar = (props) => {
-  const { folders, handleFolderClick} =props;
-  const foldersList = folders.map((folder, idx) => (
-    <Folders {...folder} key={idx} handleFolderClick={handleFolderClick} />
-    
-  ));
+  console.log(props)
+  
   return (
     <div className="folder_sidebar">
-    {foldersList}
+     <ul className="filteredFolder">
+      <li>
+      <h3>{props.folders.name}</h3>
+      </li>
+    </ul>
     <BackButton />
   </div>
     );

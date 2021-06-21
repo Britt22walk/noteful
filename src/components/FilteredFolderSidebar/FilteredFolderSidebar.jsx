@@ -1,6 +1,5 @@
 import React, {Link} from "react";
-import AppContext from "../AppContext";
-import Folders from "../Folders/Folders";
+
 import BackButton from '../BackButton/BackButton';
 
 

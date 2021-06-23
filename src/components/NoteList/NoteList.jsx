@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Notes from "../Notes/Notes";
-
 import "./NoteList.css";
 
 export default function NoteList(props) {

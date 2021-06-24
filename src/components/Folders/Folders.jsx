@@ -10,7 +10,7 @@ export default function Folders(props) {
             <li>
               <Link
                 to={`/folder/${props.id}`}
-                onClick={(e) => props.handleFolderClick(props.id)}
+                
               >
                 {props.name}
               </Link>

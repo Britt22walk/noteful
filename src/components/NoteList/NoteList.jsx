@@ -5,11 +5,22 @@ import AddNoteForm from "../AddNoteForm/AddNoteForm";
 import "./NoteList.css";
 
 export default function NoteList(props) {
-  
+  console.log(props)
   const notesList = props.notes.map((note, idx) => (
-    <Notes {...note} key={idx} handleNoteClick={props.handleNoteClick} handleDeleteNote={props.handleDeleteNote}  />
+    <Notes
+      {...note}
+      key={idx}
+      handleNoteClick={props.handleNoteClick}
+      handleDeleteNote={props.handleDeleteNote}
+    />
   ));
-  console.log(props);
+  
 
-  return <div className="note_list"><AddFolderForm/><AddNoteForm folders={props.folders}/>{notesList}</div>;
+  return (
+    <div className="note_list">
+      <AddFolderForm />
+      <AddNoteForm folders={props.folders} />
+      {notesList}
+    </div>
+  );
 }

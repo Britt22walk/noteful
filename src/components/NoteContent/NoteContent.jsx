@@ -14,7 +14,7 @@ const { note } = props
       <p>{note.modified}</p>
       
      <p>{note.content}</p>
-      <button className="delete_btn">Delete Note</button>
+      <button className="delete_btn" onClick={()=>props.handleDeleteNote(note.id)}>Delete Note</button>
       
     </div>
   );

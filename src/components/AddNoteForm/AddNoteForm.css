@@ -1,0 +1,17 @@
+.addNoteForm{
+    border: 1px solid black;
+    max-width: max-content;
+    padding: 10px;
+}
+
+button{
+    margin: 5px;
+}
+
+input{
+    margin: 5px;
+}
+
+textarea{
+    margin: 5px
+}

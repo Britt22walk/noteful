@@ -1,23 +1,42 @@
 import React, { Component } from "react";
+import './AddNoteForm.css'
 
 class AddNoteForm extends Component {
-  state = {};
+  constructor(props){
+    super (props)
+    this.state={ 
+      newNote: {
+        name: '',
+        content: '',
+        folder: '',
+        touched: false,
+      }
+
+    }
+  }
   render() {
+    
     return (
       <form className="addNoteForm">
         <h2>Create New Note</h2>
         <div className="new_note_name">
-          <label>Note Name</label>
-          <input type="text"></input>
+          <label>Name</label>
+          <input type="text" id="newNoteName" name="newNoteName"></input>
         </div>
         <div className="new_note_content">
-          <label>Note Content</label>
-          /*long form text box*/
+          <label>Content</label>
+          <textarea rows="10" id="newNoteContent" name="newNoteContent"></textarea>
         </div>
         <div className="new_note_folder">
-          <label>Folder</label>
-          */drop down list of availible folders*/
+          <label>Containing Folder</label>
+          <select>
+            <option>Folder 1</option>
+            <option>Folder 2</option>
+            <option>Folder 3</option>
+          </select>
         </div>
+        <button type="submit">Submit</button>
+        <button type="cancel">Cancel</button>
       </form>
     );
   }

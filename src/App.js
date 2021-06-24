@@ -3,10 +3,10 @@ import React, { Component } from "react";
 import { Route, Link, useLocation, useHistory } from "react-router-dom";
 import FolderSidebar from "./components/FolderSiderbar/FolderSidebar";
 import NoteList from "./components/NoteList/NoteList";
-import Header from "./components/Header/Header";
 import NoteContent from "./components/NoteContent/NoteContent";
 import AppContext from "./components/AppContext";
 import FilteredFolderSidebar from "./components/FilteredFolderSidebar/FilteredFolderSidebar";
+import AddNoteForm from "./components/AddNoteForm/AddNoteForm";
 import {getNotesForFolder, findNote, findFolder} from './noteful-helpers'
 
 class App extends Component {
@@ -41,15 +41,7 @@ class App extends Component {
         this.setError(error);
       });
   }
-  /*findFolder = (folders = [], folderId) => {
-    folders.find((folder) => folder.id === folderId)}
-
-  findNote = (notes = [], noteId) => {notes.find((note) => note.id === noteId)}
-
-  getNotesForFolder = (notes = [], folderId) => {
-    notes.filter((note) => note.folderId === folderId)}*/
-
-  
+ 
 
   handleFolderClick = (selectedFolder) => {
     console.log("the id of the folder clicked is " + selectedFolder);
@@ -63,12 +55,31 @@ class App extends Component {
     this.setState({ filteredNotes, filteredFolder });
   };
 
- /* handleNoteClick = (selectedNote) => {
-    console.log("content will be displaye for", selectedNote);
-    const notes = this.state.notes.filter((note) => note.id === selectedNote);
-    this.setState({ notes: notes });
-  };*/
+handleDeleteNote = (noteToDelete) =>{
+  fetch (`http://localhost:9090/notes/`+ noteToDelete, {
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json'
+    },
+  })
+  .then(res=>{
+    if (!res.ok)
+     return res.json().then(e => Promise.reject(e))
+    return res.json()
+  })
+  .then(res => {
+    this.handleDeleteNoteClick()
+    console.log(res)})
+    .catch (error => {
+      console.log ({error})
+    })
+  console.log("handleDeleteNoteClick registered on " + noteToDelete)
+}
 
+handleDeleteNoteClick=(notesToDelete)=>{
+  const notes =  this.state.notes.filter(note=> note.id !== notesToDelete)
+  this.setState({ notes })
+}
   renderNavRoutes() {
     const { notes } = this.state;
     return (
@@ -109,7 +120,7 @@ class App extends Component {
             render={(routeProps) => {
               const { folderId } = routeProps.match.params;
               const notesForFolder = getNotesForFolder(notes, folderId);
-              return <NoteList {...routeProps} notes={notesForFolder} handleNoteClick={this.handleNoteClick} />;
+              return <NoteList {...routeProps} notes={notesForFolder} folders={folders} handleNoteClick={this.handleNoteClick} handleDeleteNote={this.handleDeleteNote} />;
             }}
           />
         ))}
@@ -118,7 +129,7 @@ class App extends Component {
           render={(routeProps) => {
             const { noteId } = routeProps.match.params;
             const note = findNote(notes, noteId);
-            return <NoteContent {...routeProps} note={note} />;
+            return <NoteContent {...routeProps} note={note} handleDeleteNote={this.handleDeleteNote}/>;
           }}
         />
       </div>
@@ -139,69 +150,4 @@ class App extends Component {
   }
 }
 
-/*
-  render() {
-    const contextValue = {
-      allFolders: this.Folders,
-      activeFolder: this.state.folders,
-    };
-    return (
-      <main className="App">
-        <header>
-          <Header />
-        </header>
-        <AppContext.Provider value={contextValue}>
-          <Route
-            exact
-            path="/"
-            render={() => (
-              <div>
-                <FolderSidebar
-                  folders={this.state.folders}
-                  handleFolderClick={this.handleFolderClick}
-                  addClickHandler={() => {
-                    console.log("Add button clicked");
-                  }}
-                />
-                <NoteList
-                  notes={this.state.notes}
-                  handleNoteClick={this.handleNoteClick}
-                />
-              </div>
-            )}
-          />
-
-          <Route
-            path="/folder/:folderId"
-            render={() => (
-              <div>
-                <FolderSidebar
-                  folders={this.state.folders}
-                  handleFolderClick={this.handleFolderClick}
-                />
-                <NoteList
-                  notes={this.state.filteredNotes}
-                  handleNoteClick={this.handleNoteClick}
-                />
-              </div>
-            )}
-          />
-          <Route
-            path="/note/:noteId"
-            render={({ history }) => {
-              console.log(history);
-              return (
-                <div>
-                  <FilteredFolderSidebar folders={this.state.filteredFolder} />
-                  <NoteContent notes={this.state.notes} />
-                </div>
-              );
-            }}
-          />
-        </AppContext.Provider>
-      </main>
-    );
-  }
-}
-*/
 export default App;

@@ -1,26 +1,34 @@
 import React, { Component } from "react";
+import AppContext from "../AppContext";
 import Notes from "../Notes/Notes";
 import AddFolderForm from "../AddFolderForm/AddFolderForm";
 import AddNoteForm from "../AddNoteForm/AddNoteForm";
+import { getNotesForFolder } from "../../noteful-helpers";
 import "./NoteList.css";
 
-export default function NoteList(props) {
-  console.log(props)
-  const notesList = props.notes.map((note, idx) => (
-    <Notes
-      {...note}
-      key={idx}
-      handleNoteClick={props.handleNoteClick}
-      handleDeleteNote={props.handleDeleteNote}
-    />
-  ));
-  
 
-  return (
-    <div className="note_list">
+class NoteList extends Component {
+static contextType=AppContext; 
+  render() { 
+    const {notes, folders, handleDeleteNote } = this.context;
+    const { folderId } = this.props.match.params;
+    const notesForFolder = getNotesForFolder(notes, folderId);
+    const notesList = notesForFolder.map((note, idx) => (
+      <Notes
+        {...note}
+        key={idx}
+        handleDeleteNote={handleDeleteNote}
+      />
+    ));
+    return (
+      <div className="note_list">
       <AddFolderForm />
-      <AddNoteForm folders={props.folders} />
+      <AddNoteForm folders={folders} />
       {notesList}
     </div>
-  );
+      );
+  }
 }
+ 
+export default NoteList;
+

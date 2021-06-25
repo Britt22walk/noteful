@@ -1,24 +1,37 @@
-import React, {Link} from "react";
-
+import React, { Component } from 'react';
+import AppContext from "../AppContext";
 import BackButton from '../BackButton/BackButton';
+import { findNote, findFolder } from '../../noteful-helpers'
 
 
-const FilteredFolderSiderbar = (props) => {
-  console.log(props)
+class FilteredFolderSidebar extends Component {
+  static contextType = AppContext;
   
-  return (
-    <div className="folder_sidebar">
+  render() {
+    const { notes, folders } = this.context; 
+    const { noteId } = this.props.match.params;
+            const note = findNote(notes, noteId) || {};
+            const folder = findFolder(folders, note.folderId); 
+    return (
+      <div className="folder_sidebar">
      <ul className="filteredFolder">
       <li>
-      <h3>{props.folders.name}</h3>
+      <h3>{folder.name}</h3>
       </li>
     </ul>
     <BackButton />
   </div>
-    );
+      );
+  }
 }
  
-export default FilteredFolderSiderbar;
+export default FilteredFolderSidebar;
+
+
+  
+
+ 
+
 
 /*class FilteredFolderSidebar extends Component {
   

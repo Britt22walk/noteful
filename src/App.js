@@ -6,7 +6,6 @@ import NoteList from "./components/NoteList/NoteList";
 import NoteContent from "./components/NoteContent/NoteContent";
 import AppContext from "./components/AppContext";
 import FilteredFolderSidebar from "./components/FilteredFolderSidebar/FilteredFolderSidebar";
-import { getNotesForFolder, findNote, findFolder } from "./noteful-helpers";
 
 class App extends Component {
   constructor(props) {
@@ -68,82 +67,23 @@ class App extends Component {
   };
 
   renderNavRoutes() {
-    const { notes } = this.state;
     return (
       <div>
         {["/", "/folder/:folderId"].map((path) => (
-          <Route
-            exact
-            key={path}
-            path={path}
-            render={(routeProps) => (
-              <FolderSidebar
-                folders={this.state.folders}
-                notes={notes}
-                {...routeProps}
-              />
-            )}
-          />
+          <Route exact key={path} path={path} component={FolderSidebar} />
         ))}
-        <Route
-          path="/note/:noteId"
-          render={(routeProps) => {
-            const { noteId } = routeProps.match.params;
-            const note = findNote(notes, noteId) || {};
-            const foldersFiltered = findFolder(
-              this.state.folders,
-              note.folderId
-            );
-            return (
-              <FilteredFolderSidebar
-                {...routeProps}
-                folders={foldersFiltered}
-              />
-            );
-          }}
-        />
+        <Route path="/note/:noteId" component={FilteredFolderSidebar} />
       </div>
     );
   }
 
   renderMainRoutes() {
-    const { notes, folders } = this.state;
-    console.log(notes);
     return (
       <div>
         {["/", "/folder/:folderId"].map((path) => (
-          <Route
-            exact
-            key={path}
-            path={path}
-            render={(routeProps) => {
-              const { folderId } = routeProps.match.params;
-              const notesForFolder = getNotesForFolder(notes, folderId);
-              return (
-                <NoteList
-                  {...routeProps}
-                  notes={notesForFolder}
-                  folders={folders} 
-                  handleDeleteNote={this.handleDeleteNote}
-                />
-              );
-            }}
-          />
+          <Route exact key={path} path={path} component={NoteList} />
         ))}
-        <Route
-          path="/note/:noteId"
-          render={(routeProps) => {
-            const { noteId } = routeProps.match.params;
-            const note = findNote(notes, noteId);
-            return (
-              <NoteContent
-                {...routeProps}
-                note={note}
-                handleDeleteNote={this.handleDeleteNote}
-              />
-            );
-          }}
-        />
+        <Route path="/note/:noteId" component={NoteContent} />
       </div>
     );
   }

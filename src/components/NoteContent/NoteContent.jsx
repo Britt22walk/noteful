@@ -1,22 +1,26 @@
-import React from "react";
+import React, { Component } from 'react';
+import AppContext from "../AppContext";
 import "./NoteContent.css";
+import { findNote } from "../../noteful-helpers";
 
-export default function NoteContent(props) {
-  const { note } = props;
+class NoteContent extends Component {
+  static contextType = AppContext;
 
-  console.log(note);
-
-  return (
-    <div className="note-content">
-      <h2>{note.name}</h2>
-      <p>{note.modified}</p>
-      <p>{note.content}</p>
-      <button
-        className="delete_btn"
-        onClick={() => props.handleDeleteNote(note.id)}
-      >
-        Delete Note
-      </button>
-    </div>
-  );
+  render() {
+    const { noteId } = this.props.match.params;
+    const { notes } = this.context;
+    const selectedNote = findNote(notes, noteId);
+    return (
+      <div className="note-content">
+        <h2>{selectedNote.name}</h2>
+        <p>{selectedNote.modified}</p>
+        <p>{selectedNote.content}</p>
+        <button className="delete_btn" onClick={() => this.props.handleDeleteNote}>
+          Delete Note
+        </button>
+      </div>
+    );
+  }
 }
+
+export default NoteContent;

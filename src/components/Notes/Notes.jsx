@@ -1,16 +1,10 @@
-import React, { Component } from "react";
+import React from "react";
 
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Notes = (props) => {
 
-  function runClick(){
-   // console.log(props)
-   props.handleDeleteNote(props.id);
-   // props.onDeleteNoteClick()
-  }
-
-
+ 
   return (
     <div className="notes">
       <Link to={`/note/${props.id}`}>

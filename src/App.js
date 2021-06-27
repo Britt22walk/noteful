@@ -53,7 +53,6 @@ class App extends Component {
       })
       .then((res) => {
         this.handleDeleteNoteClick();
-        console.log(res);
       })
       .catch((error) => {
         console.log({ error });
@@ -65,6 +64,16 @@ class App extends Component {
     const notes = this.state.notes.filter((note) => note.id !== notesToDelete);
     this.setState({ notes });
   };
+
+  handleAddNewFolder=(newFolder)=>{
+    console.log("handleAddNewfolder triggered")
+    const newFolders= [...this.state.folders, newFolder]
+    this.setState({folders: newFolders})
+  }
+
+  handleAddNewNote=()=>{
+    console.log('handleAddnewNote trigged!')
+  }
 
   renderNavRoutes() {
     return (
@@ -92,6 +101,8 @@ class App extends Component {
       folders: this.state.folders,
       notes: this.state.notes,
       deleteNote: this.handleDeleteNote,
+      addFolder: this.handleAddNewFolder,
+      addNote: this.handleAddNewNote
     };
     return (
       <AppContext.Provider value={contextValue}>

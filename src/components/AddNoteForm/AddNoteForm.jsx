@@ -1,63 +1,109 @@
 import React, { Component } from "react";
 import AppContext from "../AppContext";
-import './AddNoteForm.css'
+import FolderSidebar from "../FolderSiderbar/FolderSidebar";
+import ValidationError from "../ValidationError/ValidationError";
+import "./AddNoteForm.css";
 
 class AddNoteForm extends Component {
-  constructor(props){
-    super (props)
-    this.state={ 
-      newNote: {
-        name: '',
-        content: '',
-        folder: '',
-        touched: false,
-      }
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "",
+      content: "",
+      folder: "",
+      touched: false,
+    };
+  }
 
+  static contextType = AppContext;
+
+  addNewNoteName(name) {
+    console.log("addnewnote name triggered");
+    this.setState({ name });
+  }
+
+  addNewNoteContent(content) {
+    console.log("addnewnote content triggered");
+    this.setState({ content });
+  }
+
+  addNewNoteFolder(folder) {
+    console.log("addnewnote folder triggered");
+    this.setState({ folder });
+  }
+
+  validateName() {
+    console.log("Validate name fired");
+    let name = this.state.name.trim();
+    if (name.length === 0) {
+      return "Name is Required";
     }
   }
 
-  static contextType=AppContext;
- 
-
-  addNewNoteName(){
-    console.log('addnewnote name triggered')
+  validateContent() {
+    console.log("Validate content");
+    let content = this.state.content.trim();
+    if (content.length === 0) {
+      return "Please enter Content";
+    } else if (content.length < 10) {
+      return "Content must be at least 10 charcters";
+    }
   }
 
-  addNewNoteContent(){
-    console.log('addnewnote content triggered')
-  }
-
-  addNewNoteFolder(){
-    console.log('addnewnote folder triggered')
-  }
-
-  handleSubmit(e){
+  handleSubmit(e) {
     e.preventDefault();
-    console.log('form submitted!')
+    console.log("form submitted!");
+    this.setState({ touched: true });
   }
+
   render() {
-    
+    console.log(this.context);
+    const folderOptions = this.context.folders.map((folder) => {
+      return (
+        <option value={folder.id} key={folder.id}>
+          {folder.name}
+        </option>
+      );
+    });
+    const nameError = this.validateName();
+    const contentError = this.validateContent();
     return (
-      <form className="addNoteForm" onSubmit={e=>this.handleSubmit(e)}>
+      <form className="addNoteForm" onSubmit={(e) => this.handleSubmit(e)}>
         <h2>Create New Note</h2>
         <div className="new_note_name">
           <label>Name</label>
-          <input type="text" id="newNoteName" name="newNoteName" onChange={e=>this.addNewNoteName(e.target.value)}></input>
+          {this.state.touched && <ValidationError message={nameError} />}
+          <input
+            type="text"
+            id="newNoteName"
+            name="newNoteName"
+            onChange={(e) => this.addNewNoteName(e.target.value)}
+          ></input>
         </div>
         <div className="new_note_content">
           <label>Content</label>
-          <textarea rows="10" id="newNoteContent" name="newNoteContent" onChange={e=>this.addNewNoteContent(e.target.value)}></textarea>
+          {this.state.touched && <ValidationError message={contentError} />}
+          <textarea
+            rows="10"
+            id="newNoteContent"
+            name="newNoteContent"
+            onChange={(e) => this.addNewNoteContent(e.target.value)}
+          ></textarea>
         </div>
         <div className="new_note_folder">
           <label>Containing Folder</label>
-          <select name="newNoteFolder" id="newNoteFolder" onChange={e=>this.addNewNoteFolder(e.target.value)}>
-            <option>Folder 1</option>
-            <option>Folder 2</option>
-            <option>Folder 3</option>
+          <select
+            name="newNoteFolder"
+            id="newNoteFolder"
+            onChange={(e) => this.addNewNoteFolder(e.target.value)}
+          >
+            {folderOptions}
           </select>
         </div>
         <button type="submit">Submit</button>
-        <button type="cancel" onClick={e=> this.props.history.goBack(e)}>Cancel</button>
+        <button type="cancel" onClick={(e) => this.props.history.goBack(e)}>
+          Cancel
+        </button>
       </form>
     );
   }

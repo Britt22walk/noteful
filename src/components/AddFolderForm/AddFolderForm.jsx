@@ -9,25 +9,26 @@ class AddFolderForm extends Component {
     this.state = {
       title: "",
       touched: false,
-      titleValid: false,
-      
     };
   }
-
   static contextType = AppContext;
+
+  addNewFolder(name) {
+    this.setState({ title: name, touched: true });
+  }
 
   handleSubmit(e) {
     e.preventDefault();
     const { title } = this.state
-    console.log("title: ", title.value)
+    console.log("title: ", title)
     
-    //this.validateTitle();
+    
 
-    //const newFolder = {
-    //  name: title
-    // }
+    const newFolder = {
+      name: title
+     }
 
-    /*fetch(
+    fetch(
       `http://localhost:9090/folders`,
       {
         method: "POST",
@@ -49,29 +50,27 @@ class AddFolderForm extends Component {
             this.context.addFolder(data)
         })
         .catch((error) => {
+          this.setState({ error })
           console.log({ error });
         })
-    ;*/
+    ;
   }
-
-  addNewFolder(name) {
-    this.setState({ title: name, touched: true });
-  }
-
 
   validateTitle() {
     const name = this.state.title.trim();
     if (name.length === 0) {
-      return "Folder name field cannot be blank";
-    } else {
-      this.setState({ titleValid: true });
-    }
+      return "Title is Required";
+    } 
   }
 
+
+  
+
   render() {
-    const titleError = this.validateTitle();
+    const titleError = this.validateTitle()
 
     return (
+      
       <form className="addFolderForm" onSubmit={(e) => this.handleSubmit(e)}>
         <div className="new_folder_name">
           <label>Enter Folder Name</label>
@@ -79,13 +78,15 @@ class AddFolderForm extends Component {
             type="text"
             name="newFolderName"
             id="newFolderName"
+            placeholder="New Folder Name"
             onChange={(e) => this.addNewFolder(e.target.value)}
           />
-          <ValidationError message={titleError} />
+          {this.state.touched && (<ValidationError message={titleError} />)}
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit" disabled={this.validateTitle()}>Submit</button>
         <button type="cancel">Cancel</button>
       </form>
+      
     );
   }
 }

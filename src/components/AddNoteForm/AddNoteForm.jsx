@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import AppContext from "../AppContext";
 import './AddNoteForm.css'
 
 class AddNoteForm extends Component {
@@ -14,6 +15,9 @@ class AddNoteForm extends Component {
 
     }
   }
+
+  static contextType=AppContext;
+ 
 
   addNewNoteName(){
     console.log('addnewnote name triggered')
@@ -53,7 +57,7 @@ class AddNoteForm extends Component {
           </select>
         </div>
         <button type="submit">Submit</button>
-        <button type="cancel">Cancel</button>
+        <button type="cancel" onClick={e=> this.props.history.goBack(e)}>Cancel</button>
       </form>
     );
   }

@@ -22,8 +22,6 @@ static contextType=AppContext;
     ));
     return (
       <div className="note_list">
-      <AddFolderForm />
-      <AddNoteForm folders={folders} />
       {notesList}
     </div>
       );

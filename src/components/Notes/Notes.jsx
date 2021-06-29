@@ -1,31 +1,32 @@
-import React from "react";
-import { useHistory } from "react-router";
+import React, { Component } from 'react';
+import AppContext from '../AppContext';
+import { Link, withRouter } from "react-router-dom";
 
-import { Link } from "react-router-dom";
+class Notes extends Component {
+  static contextType=AppContext;
 
-
-
-const Notes = (props) => {
-let history=useHistory(); 
+  handleClick(noteId){
+  this.context.deleteNote(noteId)
+  this.props.history.goBack()
  
-function handleClick(e){
-  e.preventDefault();
-    console.log("click logged!")
   }
-
-
- 
-  return (
+  render() { 
+    return (
     <div className="notes">
-      <Link to={`/note/${props.id}`}>
-        <h2>{props.name}</h2>
+      <Link to={`/note/${this.props.id}`}>
+        <h2>{this.props.name}</h2>
       </Link>
-      <p>{props.modified}</p>
-      <button className="delete_btn" onClick={()=>this.handleClick()}>
+      <p>{this.props.modified}</p>
+      <button className="delete_btn"  onClick={e=>this.handleClick(this.props.id)}>
         Delete Note
       </button>
-    </div>
-  );
-};
+    </div>  );
+  }
+}
+ 
+export default withRouter (Notes);
 
-export default Notes;
+
+
+//()=> props.handleDeleteNote(props.id).history
+

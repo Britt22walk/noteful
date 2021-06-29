@@ -6,6 +6,8 @@ import NoteList from "./components/NoteList/NoteList";
 import NoteContent from "./components/NoteContent/NoteContent";
 import AppContext from "./components/AppContext";
 import FilteredFolderSidebar from "./components/FilteredFolderSidebar/FilteredFolderSidebar";
+import AddFolderForm from "./components/AddFolderForm/AddFolderForm";
+import AddNoteForm from './components/AddNoteForm/AddNoteForm';
 
 class App extends Component {
   constructor(props) {
@@ -82,6 +84,8 @@ class App extends Component {
           <Route exact key={path} path={path} component={FolderSidebar} />
         ))}
         <Route path="/note/:noteId" component={FilteredFolderSidebar} />
+        <Route path="/add-folder" component={FolderSidebar} />
+        <Route path="/add-note" component={FolderSidebar} />
       </div>
     );
   }
@@ -93,6 +97,8 @@ class App extends Component {
           <Route exact key={path} path={path} component={NoteList} />
         ))}
         <Route path="/note/:noteId" component={NoteContent} />
+        <Route path="/add-folder" component={AddFolderForm} />
+        <Route path="/add-note" component={AddNoteForm} />
       </div>
     );
   }
